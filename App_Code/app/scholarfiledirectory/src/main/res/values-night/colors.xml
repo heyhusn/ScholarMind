@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_beginner">#F0FFF8</color>
+    <color name="green_primary">#059669</color>
+
+    <color name="bg_technical">#F8F9FF</color>
+    <color name="blue_primary">#1E3FE8</color>
+    <color name="code_box_bg">#1E2130</color>
+    <color name="code_text_color">#A5B4FC</color>
+
+    <color name="old_brick_red">#991B1B</color>
+    <color name="bg_flashcard">#FFF5F5</color>
+    <color name="dodger_blue_link">#3A5CFF</color>
+
+    <color name="chat_header_dark">#1F2937</color>
+    <color name="chat_bubble_received">#E5E7EB</color>
+
+    <color name="quiz_purple_primary">#5B21B6</color>
+    <color name="quiz_bg_light">#F9F5FF</color>
+    <color name="quiz_progress_track">#A78BFA</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="text_dark">#0F1117</color>
+    <color name="text_muted">#374151</color>
+    <color name="text_gray_label">#6B7280</color>
+</resources>

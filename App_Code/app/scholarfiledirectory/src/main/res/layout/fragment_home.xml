@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0F2FF">
+
+    <!-- ── TOP HEADER (dark blue) ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#0D1B4B"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="36dp"
+        android:paddingBottom="20dp">
+
+        <!-- Top bar: back + title + icons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <FrameLayout
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/splash_icon_bg">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="←"
+                    android:layout_marginBottom="3dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"/>
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:text="Paper Detail"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <!-- Right icons -->
+            <FrameLayout
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:background="@drawable/splash_icon_bg"
+                android:layout_marginEnd="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="🔖"
+                    android:textSize="15sp"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:background="@drawable/splash_icon_bg">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="⬆"
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFF"/>
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Paper title -->
+        <TextView
+            android:id="@+id/tvPaperTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Upload a paper to begin"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+
+        <!-- Authors line -->
+        <TextView
+            android:id="@+id/tvPaperAuthors"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text=""
+            android:textColor="#99BBFF"
+            android:textSize="12sp"/>
+
+        <!-- Tags row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/tvFieldTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tag_bg_blue"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="5dp"
+                android:text="Research"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/tvCitationsTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tag_bg_blue"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="5dp"
+                android:text="— Citations"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ── TABS ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:elevation="2dp">
+
+        <TextView
+            android:id="@+id/tabSummary"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="Summary"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:background="@drawable/tab_selected_bg"/>
+
+        <TextView
+            android:id="@+id/tabCitations"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="Citations"
+            android:textColor="#6B7280"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:id="@+id/tabActions"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:text="Actions"
+            android:textColor="#6B7280"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
+    <!-- ── SCROLLABLE CONTENT ── -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!-- Tab Contents Container -->
+            <LinearLayout
+                android:id="@+id/contentSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <!-- AI Overview Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_corner_bg"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AI OVERVIEW"
+                    android:textColor="#3A5CFF"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
+
+                <TextView
+                    android:id="@+id/tvAiOverviewTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Analyzing paper…"
+                    android:textColor="#0F1117"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvAiOverviewBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Upload a PDF to see an AI-generated overview of the paper."
+                    android:textColor="#6B7280"
+                    android:textSize="13sp"
+                    android:lineSpacingMultiplier="1.4"/>
+            </LinearLayout>
+
+            <!-- Sections Header -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:text="Sections"
+                android:textColor="#0F1117"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <!-- Section: Abstract (expanded / highlighted) -->
+            <!-- Section: Abstract -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_corner_bg"
+                android:elevation="1dp">
+                
+                <LinearLayout
+                    android:id="@+id/sectionAbstractHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:text="📋"
+                        android:textSize="18sp"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:text="Abstract"
+                        android:textColor="#0F1117"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/arrowAbstract"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="∨"
+                        android:textColor="#6B7280"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                
+                <TextView
+                    android:id="@+id/textAbstractSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely."
+                    android:textColor="#6B7280"
+                    android:textSize="13sp"
+                    android:lineSpacingMultiplier="1.4"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <!-- Section: Methodology -->
+            <LinearLayout
+                android:id="@+id/sectionMethodologyCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_corner_bg"
+                android:elevation="1dp">
+                
+                <LinearLayout
+                    android:id="@+id/sectionMethodologyHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:text="🔬"
+                        android:textSize="18sp"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:text="Methodology"
+                        android:textColor="#0F1117"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/arrowMethodology"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="›"
+                        android:textColor="#6B7280"
+                        android:textSize="20sp"/>
+                </LinearLayout>
+                
+                <TextView
+                    android:id="@+id/textMethodologySummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="The model uses stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively. It employs Multi-Head Attention, allowing the model to jointly attend to information from different representation subspaces at different positions."
+                    android:textColor="#6B7280"
+                    android:textSize="13sp"
+                    android:lineSpacingMultiplier="1.4"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <!-- Section: Results -->
+            <LinearLayout
+                android:id="@+id/sectionResultsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_corner_bg"
+                android:elevation="1dp">
+                
+                <LinearLayout
+                    android:id="@+id/sectionResultsHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:text="📊"
+                        android:textSize="18sp"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:text="Results"
+                        android:textColor="#0F1117"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/arrowResults"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="›"
+                        android:textColor="#6B7280"
+                        android:textSize="20sp"/>
+                </LinearLayout>
+                
+                <TextView
+                    android:id="@+id/textResultsSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="On the WMT 2014 English-to-German translation task, the big transformer model establishes a new state of the art BLEU score of 28.4. On the English-to-French task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight P100 GPUs."
+                    android:textColor="#6B7280"
+                    android:textSize="13sp"
+                    android:lineSpacingMultiplier="1.4"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <!-- Section: Conclusion -->
+            <LinearLayout
+                android:id="@+id/sectionConclusionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_corner_bg"
+                android:elevation="1dp">
+                
+                <LinearLayout
+                    android:id="@+id/sectionConclusionHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:text="💡"
+                        android:textSize="18sp"
+                        android:gravity="center"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:text="Conclusion"
+                        android:textColor="#0F1117"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:id="@+id/arrowConclusion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="›"
+                        android:textColor="#6B7280"
+                        android:textSize="20sp"/>
+                </LinearLayout>
+                
+                <TextView
+                    android:id="@+id/textConclusionSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="In this work, we presented the Transformer, the first sequence transduction model based entirely on attention. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to handle large inputs."
+                    android:textColor="#6B7280"
+                    android:textSize="13sp"
+                    android:lineSpacingMultiplier="1.4"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            </LinearLayout> <!-- End of contentSummary -->
+
+            <!-- Content Citations -->
+            <LinearLayout
+                android:id="@+id/contentCitations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="20dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/tvCitationAuthors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Authors: —"
+                    android:textColor="#0F1117"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/tvCitationNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Citations: —"
+                    android:textColor="#3A5CFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="24dp"/>
+
+                <com.example.scholarmind.utils.CitationMeterView
+                    android:id="@+id/citationMeter"
+                    android:layout_width="260dp"
+                    android:layout_height="130dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:id="@+id/tvCitationRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Citation Impact: —"
+                    android:textColor="#107C41"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- AI-generated citations list -->
+                <TextView
+                    android:id="@+id/tvCitationsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="#374151"
+                    android:textSize="12sp"
+                    android:lineSpacingMultiplier="1.5"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+
+            <!-- Content Actions (Placeholder) -->
+            <LinearLayout
+                android:id="@+id/contentActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="20dp"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Actions content will appear here."
+                    android:textColor="#6B7280"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+            <!-- ── BOTTOM ACTION BUTTONS (Premium Floating Card) ── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/action_strip_bg"
+                android:elevation="8dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="14dp">
+
+                <!-- Beginner -->
+                <LinearLayout
+                    android:id="@+id/btnBeginner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <FrameLayout
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:background="@drawable/action_btn_bg"
+                        android:elevation="2dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="🎓"
+                            android:textSize="26sp"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Beginner"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#5B5FEF"/>
+                </LinearLayout>
+
+                <!-- Technical (center — raised, vivid gradient) -->
+                <LinearLayout
+                    android:id="@+id/btnTechnical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <FrameLayout
+                        android:layout_width="68dp"
+                        android:layout_height="68dp"
+                        android:background="@drawable/action_btn_active_bg"
+                        android:elevation="10dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="🔬"
+                            android:textSize="30sp"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Technical"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#4F46E5"/>
+                </LinearLayout>
+
+                <!-- Podcast -->
+                <LinearLayout
+                    android:id="@+id/btnPodcast"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <FrameLayout
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:background="@drawable/action_btn_bg"
+                        android:elevation="2dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="🎙️"
+                            android:textSize="26sp"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Podcast"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#5B5FEF"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

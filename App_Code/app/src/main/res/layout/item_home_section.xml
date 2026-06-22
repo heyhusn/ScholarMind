@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_corner_bg"
+    android:elevation="1dp">
+
+    <LinearLayout
+        android:id="@+id/sectionHeader"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/tvSectionIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:textSize="18sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tvSectionTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/arrowSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="20sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvSectionContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp"
+        android:lineSpacingMultiplier="1.4"
+        android:visibility="gone"/>
+</LinearLayout>

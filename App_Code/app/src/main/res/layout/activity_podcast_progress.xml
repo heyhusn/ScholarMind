@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0D1B4B"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingStart="36dp"
+    android:paddingEnd="36dp">
+
+    <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+
+    <!-- Glowing Microphone Ring -->
+    <FrameLayout
+        android:id="@+id/podcastRingContainer"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="24dp">
+        
+        <View
+            android:id="@+id/podcastRing"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/brain_ring"/>
+            
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="🎙️"
+            android:textSize="54sp"/>
+    </FrameLayout>
+
+    <!-- Status Titles -->
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generating Podcast…"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/tvStatusSub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="32dp"
+        android:text="Analyzing text and preparing script"
+        android:textSize="13sp"
+        android:textColor="#7B8FCC"
+        android:gravity="center"/>
+
+    <!-- Progress Bar (coherent layout structure matching ProcessingActivity) -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/progress_track">
+        <View
+            android:id="@+id/progressFill"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/progress_fill"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="0% complete"
+        android:textSize="13sp"
+        android:textColor="#7B8FCC"
+        android:gravity="center"
+        android:textStyle="bold"/>
+
+    <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1.2"/>
+
+</LinearLayout>

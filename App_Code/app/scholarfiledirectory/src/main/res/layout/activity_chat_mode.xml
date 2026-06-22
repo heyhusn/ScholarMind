@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0F4FF">
+
+    <!-- ── Header ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#1A1A2E"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <FrameLayout
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="←"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/tvPaperTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Paper Title"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvPaperAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Author · Year"
+                android:textColor="#AAAACC"
+                android:textSize="13sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💬 Chat"
+            android:textColor="#4A90D9"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- ── Chat messages ── -->
+    <ScrollView
+        android:id="@+id/scrollChat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:clipToPadding="false"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/llMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <!-- ── Typing indicator ── -->
+    <TextView
+        android:id="@+id/tvTyping"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="  AI is typing..."
+        android:textColor="#4A90D9"
+        android:textSize="13sp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="6dp"
+        android:visibility="gone" />
+
+    <!-- ── Input bar ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="12dp"
+        android:gravity="center_vertical"
+        android:elevation="8dp">
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Ask anything about this paper..."
+            android:textSize="15sp"
+            android:textColor="#1A1A2E"
+            android:textColorHint="#AAAACC"
+            android:background="@drawable/bg_input_field"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:imeOptions="actionSend"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLines="4" />
+
+        <FrameLayout
+            android:id="@+id/btnSend"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_send_button"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="➤"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp" />
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

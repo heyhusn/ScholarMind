@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1E3FE8"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="60dp"
+        android:paddingBottom="40dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/rounded_corner_bg"
+            android:gravity="center"
+            android:text="🧠"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="ScholarMind"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create your free account"
+            android:textColor="#80FFFFFF"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGoogleSignUp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Continue with Google"
+                android:textColor="#1E2130"
+                app:cornerRadius="12dp"
+                app:strokeColor="#E5E7EB" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" android:background="#E5E7EB" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginHorizontal="8dp" android:text="or sign up with email" android:textColor="#9CA3AF" android:textSize="12sp" />
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" android:background="#E5E7EB" />
+            </LinearLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FULL NAME" android:textColor="#374151" android:textSize="12sp" android:textStyle="bold" />
+            <EditText
+                android:id="@+id/etFullName"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="#F3F4F6"
+                android:hint="Your full name"
+                android:textColor="#0F1117"
+                android:textColorHint="#9CA3AF"
+                android:paddingHorizontal="16dp" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="UNIVERSITY EMAIL" android:textColor="#374151" android:textSize="12sp" android:textStyle="bold" />
+            <EditText
+                android:id="@+id/etSignUpEmail"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="#F3F4F6"
+                android:hint="you@university.edu"
+                android:inputType="textEmailAddress"
+                android:textColor="#0F1117"
+                android:textColorHint="#9CA3AF"
+                android:paddingHorizontal="16dp" />
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PASSWORD" android:textColor="#374151" android:textSize="12sp" android:textStyle="bold" />
+            <EditText
+                android:id="@+id/etSignUpPassword"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:background="#F3F4F6"
+                android:hint="••••••••••••"
+                android:inputType="textPassword"
+                android:textColor="#0F1117"
+                android:textColorHint="#9CA3AF"
+                android:paddingHorizontal="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:weightSum="4">
+                <View android:layout_width="0dp" android:layout_height="4dp" android:layout_marginEnd="4dp" android:layout_weight="1" android:background="#10B981" />
+                <View android:layout_width="0dp" android:layout_height="4dp" android:layout_marginEnd="4dp" android:layout_weight="1" android:background="#10B981" />
+                <View android:layout_width="0dp" android:layout_height="4dp" android:layout_marginEnd="4dp" android:layout_weight="1" android:background="#10B981" />
+                <View android:layout_width="0dp" android:layout_height="4dp" android:layout_weight="1" android:background="#F59E0B" />
+            </LinearLayout>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="Strong password" android:textColor="#10B981" android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/cbTerms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="I agree to ScholarMind's Terms of Service and Privacy Policy"
+                android:textColor="#6B7280"
+                android:textSize="12sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:backgroundTint="#3A5CFF"
+                android:text="Sign Up Free"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="14dp" />
+
+            <TextView
+                android:id="@+id/tvSignInPrompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Already have an account? Sign In"
+                android:textColor="#6B7280"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

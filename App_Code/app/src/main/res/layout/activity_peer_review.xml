@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9FAFB">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="36dp"
+            android:paddingBottom="12dp">
+
+            <FrameLayout
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_card_beginner"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="‹"
+                    android:textColor="#3A5CFF"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="AI Peer Review"
+                android:textColor="#0D1B4B"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- Main Scrollable Area -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Description -->
+                <TextView
+                    android:id="@+id/tvPeerReviewDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Upload your research paper draft (PDF or DOCX). Scholar Mind AI will review the methodology, find limitations/flaws, and compile 5 questions that peer reviewers might ask."
+                    android:textColor="#6B7280"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="24dp"
+                    android:lineSpacingExtra="3dp" />
+
+                <!-- File Picker Drop Zone Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardDropZone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="32dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📤"
+                            android:textSize="48sp"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select PDF or Word File"
+                            android:textColor="#0D1B4B"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Supports .pdf and .docx formats (Max 50MB)"
+                            android:textColor="#9CA3AF"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Selected File Display Box (Initially Hidden) -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardSelectedFile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📄"
+                            android:textSize="28sp"
+                            android:layout_marginEnd="12dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvSelectedFilename"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#0D1B4B"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:text="filename.docx" />
+
+                            <TextView
+                                android:id="@+id/tvSelectedFilesize"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#6B7280"
+                                android:textSize="12sp"
+                                android:layout_marginTop="2dp"
+                                android:text="2.4 MB" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/btnRemoveFile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="✕"
+                            android:textColor="#EF4444"
+                            android:textSize="20sp"
+                            android:padding="8dp"
+                            android:clickable="true"
+                            android:focusable="true" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Start Action Button -->
+                <Button
+                    android:id="@+id/btnAnalyze"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:text="Start Peer Review Analysis"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:backgroundTint="#3A5CFF"
+                    app:cornerRadius="27dp"
+                    android:layout_marginBottom="24dp"
+                    android:enabled="false" />
+
+                <!-- Loading Spinner Container -->
+                <LinearLayout
+                    android:id="@+id/layoutLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginVertical="24dp"
+                    android:visibility="gone">
+
+                    <ProgressBar
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:indeterminateTint="#3A5CFF"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="✨ Reviewing paper methodology..."
+                        android:textColor="#0D1B4B"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="6dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DeepSeek is identifying limitations and technical flaws. Please wait..."
+                        android:textColor="#6B7280"
+                        android:textSize="12sp"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- Peer Review Results Container (Initially Hidden) -->
+                <LinearLayout
+                    android:id="@+id/layoutResults"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <!-- Limitations Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="3dp"
+                        app:cardBackgroundColor="#FFFFFF"
+                        android:layout_marginBottom="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="⚠️ Limitations &amp; Scope Constraints"
+                                android:textColor="#EF4444"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="12dp" />
+
+                            <LinearLayout
+                                android:id="@+id/layoutLimitations"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Technical Flaws Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="3dp"
+                        app:cardBackgroundColor="#FFFFFF"
+                        android:layout_marginBottom="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🔧 Methodological &amp; Technical Flaws"
+                                android:textColor="#D97706"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="12dp" />
+
+                            <LinearLayout
+                                android:id="@+id/layoutTechnicalFlaws"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Questions Card -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="3dp"
+                        app:cardBackgroundColor="#FFFFFF"
+                        android:layout_marginBottom="24dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="18dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="❓ Reviewer Questions (5)"
+                                android:textColor="#3A5CFF"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:layout_marginBottom="12dp" />
+
+                            <LinearLayout
+                                android:id="@+id/layoutQuestions"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Copy Report Button -->
+                    <Button
+                        android:id="@+id/btnCopyReport"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:text="📋 Copy Review Report"
+                        android:textColor="#3A5CFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:backgroundTint="#FFFFFF"
+                        app:strokeColor="#3A5CFF"
+                        app:strokeWidth="1.5dp"
+                        app:cornerRadius="26dp"
+                        android:layout_marginBottom="32dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

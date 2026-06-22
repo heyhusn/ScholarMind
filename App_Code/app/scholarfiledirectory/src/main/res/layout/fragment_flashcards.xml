@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0D0D1A">
+
+    <!-- ── HEADER ── -->
+    <LinearLayout
+        android:id="@+id/headerSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="14dp">
+
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Flashcards"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Card counter: "Card 1 of 8" -->
+            <TextView
+                android:id="@+id/tvCardCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Card 1 of 8"
+                android:textColor="#80FFFFFF"
+                android:textSize="11sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ── BOTTOM NAV BAR ── -->
+    <LinearLayout
+        android:id="@+id/navBar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:background="#1A1A2E"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
+
+        <!-- Previous button -->
+        <TextView
+            android:id="@+id/btnPrev"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="#2A2A40"
+            android:gravity="center"
+            android:text="← Prev"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <!-- Progress text: "3 / 8 studied" -->
+        <TextView
+            android:id="@+id/tvProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:text="1 / 8 studied"
+            android:textColor="#80FFFFFF"
+            android:textSize="11sp" />
+
+        <!-- Next button -->
+        <TextView
+            android:id="@+id/btnNext"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="#2A2A40"
+            android:gravity="center"
+            android:text="Next →"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- ── FLASHCARD (tappable, flippable) ── -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardFlip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerSection"
+        android:layout_above="@id/navBar"
+        android:layout_margin="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="#1A1A2E"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="28dp">
+
+            <!-- "TERM" or "DEFINITION" label -->
+            <TextView
+                android:id="@+id/tvCardLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="TERM"
+                android:textColor="#4A90D9"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.12" />
+
+            <!-- Main card content -->
+            <TextView
+                android:id="@+id/tvCardContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:lineSpacingExtra="5dp"
+                android:text="Transformer"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <!-- Tap hint at bottom -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="Tap to flip"
+                android:textColor="#40FFFFFF"
+                android:textSize="11sp" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

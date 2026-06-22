@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0A0F24"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingHorizontal="24dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
+
+    <!-- Header / Top Bar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="SCHOLARMIND · PODCAST MODE"
+            android:textColor="#5C668D"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"/>
+
+        <FrameLayout
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/splash_icon_bg">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="←"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_marginBottom="2dp"/>
+        </FrameLayout>
+    </RelativeLayout>
+
+    <!-- Microphone container with pulse rings -->
+    <FrameLayout
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginBottom="16dp">
+
+        <!-- Outer Ring -->
+        <View
+            android:id="@+id/micRingOuter"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_gravity="center"
+            android:background="@drawable/player_ring_pulse_bg"
+            android:alpha="0.0"/>
+
+        <!-- Inner Ring -->
+        <View
+            android:id="@+id/micRingInner"
+            android:layout_width="112dp"
+            android:layout_height="112dp"
+            android:layout_gravity="center"
+            android:background="@drawable/player_ring_pulse_bg"
+            android:alpha="0.0"/>
+
+        <!-- Microphone Circle -->
+        <FrameLayout
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_gravity="center"
+            android:background="@drawable/player_mic_bg"
+            android:elevation="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="🎙️"
+                android:textSize="48sp"/>
+        </FrameLayout>
+    </FrameLayout>
+
+    <!-- Paper Title and Subtitle -->
+    <TextView
+        android:id="@+id/tvPaperTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Attention Is All You Need"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/tvPaperAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="AI Audio Explanation · 18 min"
+        android:textColor="#7A8FC2"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Audio Progress Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <FrameLayout
+            android:id="@+id/progressTrack"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:background="@drawable/progress_track">
+            <View
+                android:id="@+id/progressFill"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/progress_fill"/>
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp">
+            <TextView
+                android:id="@+id/tvCurrentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="00:00"
+                android:textColor="#7A8FC2"
+                android:textSize="11sp"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tvTotalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="18:04"
+                android:textColor="#7A8FC2"
+                android:textSize="11sp"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- Playback speed selectors -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/btnSpeed075"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="0.75x"
+            android:textColor="#9EA8CC"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/player_speed_unselected"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/btnSpeed100"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="1.0x"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="2dp"
+            android:background="@drawable/player_speed_selected"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/btnSpeed125"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="1.25x"
+            android:textColor="#9EA8CC"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="2dp"
+            android:background="@drawable/player_speed_unselected"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/btnSpeed150"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="1.5x"
+            android:textColor="#9EA8CC"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="2dp"
+            android:background="@drawable/player_speed_unselected"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/btnSpeed200"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="2.0x"
+            android:textColor="#9EA8CC"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/player_speed_unselected"
+            android:clickable="true"
+            android:focusable="true"/>
+    </LinearLayout>
+
+    <!-- Media Controls -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <!-- Previous track (Hidden) -->
+        <FrameLayout
+            android:id="@+id/btnPrev"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/player_control_small_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="⏮"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"/>
+        </FrameLayout>
+
+        <!-- Rewind -->
+        <FrameLayout
+            android:id="@+id/btnRewind"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/player_control_small_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="⏪"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"/>
+        </FrameLayout>
+
+        <!-- Play/Pause -->
+        <FrameLayout
+            android:id="@+id/btnPlayPause"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/player_control_play_bg"
+            android:elevation="4dp"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView
+                android:id="@+id/tvPlayIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="▶"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:layout_marginStart="3dp"/>
+        </FrameLayout>
+
+        <!-- Fast Forward -->
+        <FrameLayout
+            android:id="@+id/btnFF"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/player_control_small_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginStart="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="⏩"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"/>
+        </FrameLayout>
+
+        <!-- Next track (Hidden) -->
+        <FrameLayout
+            android:id="@+id/btnNext"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/player_control_small_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginStart="8dp"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="⏭"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"/>
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Live Transcript Card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@drawable/player_transcript_bg"
+        android:padding="16dp"
+        android:elevation="2dp">
+
+        <!-- Header row: title + speaker badge -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="LIVE TRANSCRIPT"
+                android:textColor="#5E6890"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.1"/>
+
+            <TextView
+                android:id="@+id/tvSpeakerLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎙 Alice"
+                android:textColor="#7C3AED"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:background="@drawable/tag_bg_blue"/>
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:clipToPadding="false"
+            android:fadeScrollbars="false">
+
+            <TextView
+                android:id="@+id/tvTranscriptText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Generating audio transcript..."
+                android:textColor="#E2E8FF"
+                android:textSize="15sp"
+                android:lineSpacingMultiplier="1.5"/>
+        </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>

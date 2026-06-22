@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#FFFFFF">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">
+
+        <!--  ── PAPER HEADER GRADIENT ──  -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="130dp" android:orientation="vertical" android:background="#1E2A5E" android:paddingStart="18dp" android:paddingEnd="18dp" android:paddingTop="12dp" android:paddingBottom="18dp">
+            <!--  Nav row: back / breadcrumb / actions  -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:orientation="horizontal" android:gravity="center_vertical">
+                <!--  Back  -->
+                <FrameLayout android:id="@+id/btnBack" android:layout_width="30dp" android:layout_height="30dp" android:background="#33FFFFFF">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="←" android:textSize="13sp" android:textColor="#FFFFFF"/>
+                </FrameLayout>
+                <!--  Breadcrumb  -->
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="9dp" android:text="Paper Detail"  android:textSize="11sp" android:textColor="#73FFFFFF"/>
+                <!--  Bookmark  -->
+                <TextView android:id="@+id/btnBookmark" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔖" android:textSize="17sp" android:textColor="#FFFFFF"/>
+                <!--  Share  -->
+                <TextView android:id="@+id/btnShare" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="7dp" android:text="⬆️" android:textSize="17sp" android:textColor="#FFFFFF"/>
+            </LinearLayout>
+            <!--  Paper title  -->
+            <TextView android:id="@+id/tvPaperTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:text="Attention Is All You Need"  android:textSize="14sp" android:textColor="#FFFFFF" android:maxLines="2"/>
+            <!--  Authors & year  -->
+            <TextView android:id="@+id/tvPaperMeta" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Vaswani et al. · 2017 · NeurIPS"  android:textSize="10sp" android:textColor="#66FFFFFF"/>
+            <!--  Tags row  -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="4dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="19dp" android:text="Machine Learning"  android:textSize="10sp" android:textColor="#CCFFFFFF" android:paddingStart="8dp" android:paddingEnd="8dp" android:gravity="center_vertical" android:background="#33FFFFFF" android:layout_marginEnd="5dp"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="19dp" android:text="15 Citations"  android:textSize="10sp" android:textColor="#CCFFFFFF" android:paddingStart="8dp" android:paddingEnd="8dp" android:gravity="center_vertical" android:background="#33FFFFFF"/>
+            </LinearLayout>
+        </LinearLayout>
+        <!--  ── TAB BAR ──  -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:orientation="horizontal" android:background="#FFFFFF" android:paddingStart="18dp" android:paddingEnd="18dp" android:paddingTop="10dp" android:paddingBottom="5dp">
+            <TextView android:id="@+id/tabSummary" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="Summary"  android:textSize="11sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2563EB"/>
+            <TextView android:id="@+id/tabCitations" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="Citations"  android:textSize="11sp" android:textColor="#6B7280" android:gravity="center"/>
+            <TextView android:id="@+id/tabActions" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:text="Actions"  android:textSize="11sp" android:textColor="#6B7280" android:gravity="center"/>
+        </LinearLayout>
+        <!--  ── SCROLLABLE CONTENT ──  -->
+        <ScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingTop="12dp" android:paddingBottom="12dp">
+                <!--  AI Overview card  -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:layout_marginEnd="18dp" android:orientation="vertical" android:padding="14dp" android:background="#FFFFFF">
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="AI OVERVIEW"  android:textSize="9sp" android:letterSpacing="0.1" android:textAllCaps="true" android:textColor="#3A5CFF"/>
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp" android:text="Transformer Architecture eliminates recurrence"  android:textSize="14sp" android:textColor="#0F1117" android:maxLines="2"/>
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:text="This paper introduces the Transformer model, relying entirely on self-attention mechanisms to compute representations of input and output sequences…"  android:textSize="12sp" android:lineSpacingMultiplier="1.6" android:textColor="#374151"/>
+                </LinearLayout>
+                <!--  Sections header  -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:layout_marginTop="12dp" android:layout_marginBottom="6dp" android:text="Sections"  android:textSize="13sp" android:letterSpacing="-0.01" android:textColor="#0F1117"/>
+                <!--  Abstract (expanded / active)  -->
+                <LinearLayout android:id="@+id/sectionAbstract" android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginStart="18dp" android:layout_marginEnd="18dp" android:layout_marginBottom="6dp" android:orientation="horizontal" android:gravity="center_vertical" android:padding="11dp" android:background="#EFF6FF">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📋" android:textSize="17sp"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="11dp" android:text="Abstract"  android:textSize="12sp" android:textColor="#1E3FE8"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="▾" android:textSize="12sp" android:textColor="#6B7280"/>
+                </LinearLayout>
+                <!--  Methodology  -->
+                <LinearLayout android:id="@+id/sectionMethodology" android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginStart="18dp" android:layout_marginEnd="18dp" android:layout_marginBottom="6dp" android:orientation="horizontal" android:gravity="center_vertical" android:padding="11dp" android:background="#FFFFFF">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔬" android:textSize="17sp"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="11dp" android:text="Methodology"  android:textSize="12sp" android:textColor="#0F1117"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="›" android:textSize="12sp" android:textColor="#6B7280"/>
+                </LinearLayout>
+                <!--  Results  -->
+                <LinearLayout android:id="@+id/sectionResults" android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginStart="18dp" android:layout_marginEnd="18dp" android:layout_marginBottom="6dp" android:orientation="horizontal" android:gravity="center_vertical" android:padding="11dp" android:background="#FFFFFF">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📊" android:textSize="17sp"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="11dp" android:text="Results"  android:textSize="12sp" android:textColor="#0F1117"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="›" android:textSize="12sp" android:textColor="#6B7280"/>
+                </LinearLayout>
+                <!--  Conclusion  -->
+                <LinearLayout android:id="@+id/sectionConclusion" android:layout_width="match_parent" android:layout_height="42dp" android:layout_marginStart="18dp" android:layout_marginEnd="18dp" android:layout_marginBottom="6dp" android:orientation="horizontal" android:gravity="center_vertical" android:padding="11dp" android:background="#FFFFFF">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💡" android:textSize="17sp"/>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="11dp" android:text="Conclusion"  android:textSize="12sp" android:textColor="#0F1117"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="›" android:textSize="12sp" android:textColor="#6B7280"/>
+                </LinearLayout>
+                <!--  ── STUDY ACTIONS ROW ──  -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="65dp" android:layout_marginStart="18dp" android:layout_marginEnd="18dp" android:layout_marginTop="10dp" android:orientation="horizontal">
+                    <!--  Flashcards  -->
+                    <LinearLayout android:id="@+id/actionFlashcards" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginEnd="4dp" android:orientation="vertical" android:gravity="center" android:padding="9dp" android:background="#FFFFFF">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🃏" android:textSize="17sp" android:layout_gravity="center"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Flashcards"  android:textSize="10sp" android:textColor="#0F1117" android:layout_gravity="center"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="12 ready"  android:textSize="9sp" android:textColor="#6B7280" android:layout_gravity="center"/>
+                    </LinearLayout>
+                    <!--  Explain (active/gradient)  -->
+                    <LinearLayout android:id="@+id/actionExplain" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginStart="4dp" android:layout_marginEnd="4dp" android:orientation="vertical" android:gravity="center" android:padding="9dp" android:background="#2563EB">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎓" android:textSize="17sp" android:layout_gravity="center"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Explain"  android:textSize="10sp" android:textColor="#FFFFFF" android:layout_gravity="center"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Choose mode"  android:textSize="9sp" android:textColor="#99FFFFFF" android:layout_gravity="center"/>
+                    </LinearLayout>
+                    <!--  Viva  -->
+                    <LinearLayout android:id="@+id/actionViva" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_marginStart="4dp" android:orientation="vertical" android:gravity="center" android:padding="9dp" android:background="#FFFFFF">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎤" android:textSize="17sp" android:layout_gravity="center"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Viva"  android:textSize="10sp" android:textColor="#0F1117" android:layout_gravity="center"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="8 Qs"  android:textSize="9sp" android:textColor="#6B7280" android:layout_gravity="center"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+        <!--  ── BOTTOM NAV BAR ──  -->
+        <LinearLayout android:id="@+id/bottomNav" android:layout_width="match_parent" android:layout_height="68dp" android:orientation="horizontal" android:background="#FFFFFF" android:paddingStart="8dp" android:paddingEnd="8dp" android:paddingBottom="8dp" android:gravity="center_vertical">
+            <!--  Home  -->
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:alpha="0.35">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏠" android:textSize="19sp" android:layout_gravity="center"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Home"  android:textSize="9sp" android:textColor="#374151" android:layout_gravity="center"/>
+            </LinearLayout>
+            <!--  History  -->
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:alpha="0.35">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📚" android:textSize="19sp" android:layout_gravity="center"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="History"  android:textSize="9sp" android:textColor="#374151" android:layout_gravity="center"/>
+            </LinearLayout>
+            <!--  Upload FAB  -->
+            <FrameLayout android:layout_width="48dp" android:layout_height="48dp" android:layout_marginTop="-14dp" android:background="#2563EB">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:text="📤" android:textSize="20sp"/>
+            </FrameLayout>
+            <!--  Cards  -->
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:alpha="0.35">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🃏" android:textSize="19sp" android:layout_gravity="center"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cards"  android:textSize="9sp" android:textColor="#374151" android:layout_gravity="center"/>
+            </LinearLayout>
+            <!--  Profile  -->
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:alpha="0.35">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="👤" android:textSize="19sp" android:layout_gravity="center"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Profile"  android:textSize="9sp" android:textColor="#374151" android:layout_gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

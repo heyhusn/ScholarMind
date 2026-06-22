@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0D1B4B"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingStart="28dp"
+    android:paddingEnd="28dp">
+
+    <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+
+    <!-- Brain ring + icon -->
+    <FrameLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="8dp">
+        <View
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/brain_ring"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="🧠"
+            android:textSize="42sp"/>
+    </FrameLayout>
+
+    <!-- Analyzing title -->
+    <TextView
+        android:id="@+id/tvAnalyzing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Analyzing Paper…"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <!-- Filename -->
+    <TextView
+        android:id="@+id/tvFilename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="28dp"
+        android:text="uploaded_file.pdf"
+        android:textSize="12sp"
+        android:textColor="#7B8FCC"
+        android:gravity="center"/>
+
+    <!-- ── STEPS ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Step 1 -->
+        <LinearLayout
+            android:id="@+id/step1Row"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+            <FrameLayout
+                android:id="@+id/step1Icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/step_pending">
+                <TextView
+                    android:id="@+id/step1Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1"
+                    android:textSize="11sp"
+                    android:textColor="#80FFFFFF"/>
+            </FrameLayout>
+            <TextView
+                android:id="@+id/step1Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:text="Extracting text"
+                android:textSize="13sp"
+                android:textColor="#60FFFFFF"/>
+        </LinearLayout>
+
+        <!-- Step 2 -->
+        <LinearLayout
+            android:id="@+id/step2Row"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+            <FrameLayout
+                android:id="@+id/step2Icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/step_pending">
+                <TextView
+                    android:id="@+id/step2Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="2"
+                    android:textSize="11sp"
+                    android:textColor="#80FFFFFF"/>
+            </FrameLayout>
+            <TextView
+                android:id="@+id/step2Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:text="Parsing sections"
+                android:textSize="13sp"
+                android:textColor="#60FFFFFF"/>
+        </LinearLayout>
+
+        <!-- Step 3 -->
+        <LinearLayout
+            android:id="@+id/step3Row"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+            <FrameLayout
+                android:id="@+id/step3Icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/step_pending">
+                <TextView
+                    android:id="@+id/step3Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="3"
+                    android:textSize="11sp"
+                    android:textColor="#80FFFFFF"/>
+            </FrameLayout>
+            <TextView
+                android:id="@+id/step3Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:text="Extracting keywords"
+                android:textSize="13sp"
+                android:textColor="#60FFFFFF"/>
+        </LinearLayout>
+
+        <!-- Step 4 -->
+        <LinearLayout
+            android:id="@+id/step4Row"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+            <FrameLayout
+                android:id="@+id/step4Icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/step_pending">
+                <TextView
+                    android:id="@+id/step4Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="4"
+                    android:textSize="11sp"
+                    android:textColor="#80FFFFFF"/>
+            </FrameLayout>
+            <TextView
+                android:id="@+id/step4Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:text="Building flashcards"
+                android:textSize="13sp"
+                android:textColor="#60FFFFFF"/>
+        </LinearLayout>
+
+        <!-- Step 5 -->
+        <LinearLayout
+            android:id="@+id/step5Row"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <FrameLayout
+                android:id="@+id/step5Icon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/step_pending">
+                <TextView
+                    android:id="@+id/step5Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="5"
+                    android:textSize="11sp"
+                    android:textColor="#80FFFFFF"/>
+            </FrameLayout>
+            <TextView
+                android:id="@+id/step5Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:text="Finding relevant papers"
+                android:textSize="13sp"
+                android:textColor="#60FFFFFF"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ── PROGRESS BAR ── -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/progress_track">
+        <View
+            android:id="@+id/progressFill"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/progress_fill"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="0% complete"
+        android:textSize="11sp"
+        android:textColor="#7B8FCC"
+        android:gravity="center"/>
+
+    <!-- ── CONTINUE BUTTON (hidden initially) ── -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="28dp"
+        android:text="Continue to Summary →"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:backgroundTint="#2563EB"
+        app:cornerRadius="14dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"/>
+
+    <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+
+</LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Theme Background Colors -->
+    <color name="bg_app">#0A0B10</color>
+    <color name="bg_card">#12131A</color>
+    <color name="bg_top_bar">#12131A</color>
+    
+    <!-- Theme Text Colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#9EA8CC</color>
+    <color name="divider_color">#1C1D26</color>
+    <color name="card_border">#1C1D26</color>
+    
+    <!-- Specific screen overrides -->
+    <color name="bg_home">#0A0B10</color>
+    <color name="bg_history">#0A0B10</color>
+    <color name="text_history_title">#FFFFFF</color>
+    <color name="limit_banner_bg">#12131A</color>
+    <color name="limit_banner_stroke">#1C1D26</color>
+</resources>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "53439198397",
+    "project_id": "scholarmind-71a03",
+    "storage_bucket": "scholarmind-71a03.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53439198397:android:121122c040e557b8c5f3d4",
+        "android_client_info": {
+          "package_name": "com.example.scholarmind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53439198397-332vdq9sqoi0u29n13ak69k6btt17b8k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6TC4u0u3DmmqqnoRIHEdAraLfSMjJ4UI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53439198397-332vdq9sqoi0u29n13ak69k6btt17b8k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

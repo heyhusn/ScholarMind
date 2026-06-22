@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_bg_gradient">
+
+    <!-- Decorative blobs -->
+    <View
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:background="@drawable/splash_icon_bg"
+        android:layout_gravity="top|end"
+        android:translationX="80dp"
+        android:translationY="-60dp" />
+
+    <View
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:background="@drawable/splash_icon_bg"
+        android:layout_gravity="bottom|start"
+        android:translationX="-50dp"
+        android:translationY="50dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Back button -->
+        <FrameLayout
+            android:id="@+id/btnBack"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/bg_back_btn"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="←"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+        </FrameLayout>
+
+        <!-- Icon -->
+        <TextView
+            android:id="@+id/tvStubIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🚧"
+            android:textSize="64sp"
+            app:layout_constraintBottom_toTopOf="@id/tvStubTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvStubTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Coming Soon"
+            android:textColor="#FFFFFF"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toTopOf="@id/tvStubSubtitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStubIcon" />
+
+        <!-- Subtitle -->
+        <TextView
+            android:id="@+id/tvStubSubtitle"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:text="This feature is under development and will be available soon."
+            android:textColor="#CCE0FFFF"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.4"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvStubTitle" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9FAFB">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="36dp"
+            android:paddingBottom="12dp">
+
+            <FrameLayout
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_card_beginner"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackgroundBorderless">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="‹"
+                    android:textColor="#3A5CFF"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Paper Details"
+                android:textColor="#0D1B4B"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- Main Scrollable Details Container -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Title (Dark Navy) -->
+                <TextView
+                    android:id="@+id/tvDetailTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#0D1B4B"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:lineSpacingExtra="4dp"
+                    android:text="Attention Is All You Need"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Authors (Grey) -->
+                <TextView
+                    android:id="@+id/tvDetailAuthors"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#6B7280"
+                    android:textSize="15sp"
+                    android:text="Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Quick info chips row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="24dp">
+
+                    <!-- Citations -->
+                    <TextView
+                        android:id="@+id/tvDetailCitations"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_card_technical"
+                        android:textColor="#8A2BE2"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:text="★ 75,705 citations"
+                        android:layout_marginEnd="8dp" />
+
+                    <!-- Year -->
+                    <TextView
+                        android:id="@+id/tvDetailYear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_card_beginner"
+                        android:textColor="#3A5CFF"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:text="2017"
+                        android:layout_marginEnd="8dp" />
+
+                    <!-- OA Badge -->
+                    <TextView
+                        android:id="@+id/tvDetailOA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_card_podcast"
+                        android:textColor="#10B981"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:text="Open Access" />
+
+                </LinearLayout>
+
+                <!-- Details Card (Pure White) -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    android:layout_marginBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PUBLISHED IN"
+                            android:textColor="#9CA3AF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailVenue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#0D1B4B"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="Communications of the ACM"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PUBLISHER"
+                            android:textColor="#9CA3AF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailPublisher"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#0D1B4B"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="ACM"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="KEYWORDS"
+                            android:textColor="#9CA3AF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailKeywords"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#0D1B4B"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="Deep Learning, NLP"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PRIMARY TOPIC"
+                            android:textColor="#9CA3AF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailTopic"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#3A5CFF"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="Transformer Models"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TAXONOMY (DOMAIN / FIELD / SUBFIELD)"
+                            android:textColor="#9CA3AF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailTaxonomy"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#0D1B4B"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="Physical Sciences / Computer Science / Vision"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="FUNDING (FUNDERS / AWARDS)"
+                            android:textColor="#9CA3AF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailFunding"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#0D1B4B"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="None"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="SDGS"
+                            android:textColor="#9CA3AF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailSdgs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#0D1B4B"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="None"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="GEOGRAPHY (COUNTRIES / CONTINENTS)"
+                            android:textColor="#9CA3AF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailGeography"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#0D1B4B"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="US, CA"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="LANGUAGE"
+                            android:textColor="#9CA3AF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailLanguage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#0D1B4B"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="English"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="DOI"
+                            android:textColor="#9CA3AF"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvDetailDoi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#8A2BE2"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:autoLink="web"
+                            android:text="https://doi.org/10.1145/3065386" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Abstract Title (Dark) -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Abstract"
+                    android:textColor="#0D1B4B"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Abstract Text Card (Pure White) -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/tvDetailAbstract"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#1F2937"
+                        android:textSize="15sp"
+                        android:lineSpacingExtra="5dp"
+                        android:padding="20dp"
+                        android:text="Loading abstract..." />
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Bottom Actions Row -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="16dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+
+                <!-- Read PDF button -->
+                <Button
+                    android:id="@+id/btnReadPdf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="52dp"
+                    android:text="📄 Read PDF"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:backgroundTint="#10B981"
+                    app:cornerRadius="26dp"
+                    android:layout_marginEnd="8dp" />
+
+                <!-- AI Insights Main Action Button -->
+                <Button
+                    android:id="@+id/btnAiInsights"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="52dp"
+                    android:text="✨ AI Insights"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:backgroundTint="#3A5CFF"
+                    app:cornerRadius="26dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -20,6 +20,7 @@
   <a href="#architecture">Architecture</a> |
   <a href="#android-app">Android App</a> |
   <a href="#backend-api">Backend API</a> |
+  <a href="#backend-deployment">Backend Deployment</a> |
   <a href="#setup">Setup</a> |
   <a href="#api-reference">API Reference</a> |
   <a href="#troubleshooting">Troubleshooting</a>
@@ -32,7 +33,7 @@
 ScholarMind is an AI-powered research companion made of two parts:
 
 1. An Android app for uploading papers, searching literature, reading in multiple modes, and managing study workflows.
-2. A FastAPI backend that extracts paper text, calls AI models, queries OpenAlex, and returns structured research features to the app.
+2. A FastAPI backend in `FastAPI_Backend/` that extracts paper text, calls AI models, queries OpenAlex, and returns structured research features to the app.
 
 The goal is simple: help users move from a raw paper to understanding, notes, references, and review with as little friction as possible.
 
@@ -112,7 +113,7 @@ The Android client is a multi-screen research workspace with a polished, animate
 
 ## Backend API
 
-The backend lives in `scholar_mind_backend/` and is built with FastAPI.
+The backend lives in `FastAPI_Backend/` and is built with FastAPI.
 
 | Feature | Description |
 | --- | --- |
@@ -133,22 +134,46 @@ The backend lives in `scholar_mind_backend/` and is built with FastAPI.
 | References | Generates reference lists and exports DOCX/PDF files |
 | CORS support | Allows the Android app to talk to the API from anywhere |
 
+## Backend Deployment
+
+The FastAPI backend has been deployed on Vercel.
+
+| Link | URL |
+| --- | --- |
+| Production API | `https://your-vercel-deployment-url.vercel.app` |
+| API docs | `https://your-vercel-deployment-url.vercel.app/docs` |
+| Health check | `https://your-vercel-deployment-url.vercel.app/` |
+
+Replace the placeholder URL with your actual Vercel production URL.
+
+Expected health check response:
+
+```json
+{
+  "message": "Welcome to Scholar Mind AI Backend"
+}
+```
+
+The full backend deployment guide is available in [FastAPI_Backend/README.md](FastAPI_Backend/README.md).
+
 ## Repository Structure
 
 ```text
-scholarai/
-├─ Android app sources
-│  ├─ src/
-│  ├─ AndroidManifest.xml
-│  ├─ build.gradle.kts
-│  └─ google-services.json
-└─ scholar_mind_backend/
-   ├─ main.py
-   ├─ ai.py
-   ├─ models.py
-   ├─ pdf.py
-   ├─ requirements.txt
-   └─ test_endpoints.py
+ScholarGit/
+|-- App_Code/
+|   `-- app/
+|       |-- build.gradle.kts
+|       |-- google-services.json
+|       `-- src/
+`-- FastAPI_Backend/
+    |-- main.py
+    |-- ai.py
+    |-- models.py
+    |-- pdf.py
+    |-- requirements.txt
+    |-- vercel.json
+    |-- test_endpoints.py
+    `-- README.md
 ```
 
 ## Setup
@@ -156,13 +181,13 @@ scholarai/
 ### 1) Backend setup
 
 ```bash
-cd scholar_mind_backend
+cd FastAPI_Backend
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Create a `.env` file in `scholar_mind_backend/`:
+Create a `.env` file in `FastAPI_Backend/`:
 
 ```env
 DEEPSEEK_API_KEY=your_deepseek_api_key_here
@@ -197,8 +222,21 @@ Open the Android project in Android Studio, then:
 | Android emulator + local backend | `http://10.0.2.2:8000/` |
 | Real device on same Wi-Fi | `http://<your-pc-ip>:8000/` |
 | Public access / testing | `https://<your-ngrok-url>/` |
+| Production app | `https://your-vercel-deployment-url.vercel.app/` |
 
 If you are using the current debug configuration, remember that the app is pointed at an ngrok URL in the Gradle config, so update it before shipping a release build.
+
+### 4) Vercel deployment
+
+The backend is configured for Vercel with [vercel.json](FastAPI_Backend/vercel.json).
+
+```bash
+cd FastAPI_Backend
+vercel
+vercel --prod
+```
+
+Set `DEEPSEEK_API_KEY` and optional `OPENALEX_API_KEY` in the Vercel project settings, then redeploy after any environment variable update.
 
 ## Environment
 
@@ -291,7 +329,7 @@ If you are using the current debug configuration, remember that the app is point
 
 ### Backend
 
-1. Navigate to `scholar_mind_backend/`.
+1. Navigate to `FastAPI_Backend/`.
 2. Create and activate a virtual environment.
 3. Install dependencies from `requirements.txt`.
 4. Add your `DEEPSEEK_API_KEY` in `.env`.
@@ -303,7 +341,7 @@ If you are using the current debug configuration, remember that the app is point
 1. Open the Android project in Android Studio.
 2. Sync Gradle and wait for dependencies to finish.
 3. Confirm `google-services.json` is present.
-4. Update the backend base URL if you are not using the current ngrok address.
+4. Update the backend base URL if you are not using the current ngrok address or your Vercel production URL.
 5. Run the app on an emulator or physical device.
 
 ### Suggested launch order
@@ -317,15 +355,14 @@ If you are using the current debug configuration, remember that the app is point
 
 - If the app cannot reach the backend, check the base URL in the Android config and make sure your server is listening on the right host and port.
 - If PDF analysis fails, confirm the file is a valid PDF and under the app's size limit.
-- If DeepSeek responses fail, verify `DEEPSEEK_API_KEY` in the backend `.env`.
+- If DeepSeek responses fail, verify `DEEPSEEK_API_KEY` in the backend `.env` or Vercel settings.
 - If paper search fails, confirm outbound internet access and optional OpenAlex credentials.
 - If Firebase screens fail to load, check `google-services.json` and your Firestore rules.
-- If the backend returns malformed JSON, the repair layer should handle most cases automatically; if not, inspect the AI prompt and response in `ai.py`.
+- If the backend returns malformed JSON, the repair layer should handle most cases automatically; if not, inspect the AI prompt and response in `FastAPI_Backend/ai.py`.
 
 ## Notes
 
 - The backend enables permissive CORS so the Android client can reach it during development.
 - The app uses Firestore-backed persistence for paper history, chats, and selected paper state.
 - Some flows are animation-heavy on purpose to make the app feel responsive and polished.
-- The Android client currently expects the backend URL to be set explicitly, so keep that aligned whenever you move between local, emulator, and public deployments.
-
+- Vercel deployments are serverless, so backend in-memory context is temporary by design.

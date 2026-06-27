@@ -7,8 +7,9 @@ load_dotenv()
 
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 
+# Safely initialize client with a placeholder to prevent startup crashes when keys aren't loaded yet
 client = OpenAI(
-    api_key=DEEPSEEK_API_KEY,
+    api_key=DEEPSEEK_API_KEY or "placeholder_key",
     base_url="https://api.deepseek.com",
 )
 

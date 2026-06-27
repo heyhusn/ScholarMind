@@ -134,7 +134,7 @@ def first_nonempty_line(text: str) -> str:
     return "Untitled Paper"
 
 
-def build_fallback_analysis(doc_id: str, filename: str, extracted_text: str, error_message: str | None = None) -> PaperAnalysis:
+def build_fallback_analysis(doc_id: str, filename: str, extracted_text: str, error_message: Optional[str] = None) -> PaperAnalysis:
     title = first_nonempty_line(extracted_text)
     year_match = re.search(r"\b(19|20)\d{2}\b", extracted_text)
     year = year_match.group(0) if year_match else ""

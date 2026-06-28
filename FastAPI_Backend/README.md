@@ -37,7 +37,7 @@ Expected health check response:
 ## Project Structure
 
 ```text
-FastAPI_Backend/
+scholar_mind_backend/
 |-- main.py
 |-- ai.py
 |-- models.py
@@ -69,7 +69,7 @@ For local development, place these in a `.env` file. For production, add them in
 Open the backend folder:
 
 ```powershell
-cd FastAPI_Backend
+cd scholar_mind_backend
 ```
 
 Create and activate a virtual environment:
@@ -143,7 +143,6 @@ vercel login
 Deploy from the backend folder:
 
 ```powershell
-cd FastAPI_Backend
 vercel
 ```
 

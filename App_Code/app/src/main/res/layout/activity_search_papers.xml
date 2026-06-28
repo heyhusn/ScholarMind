@@ -9,14 +9,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="40dp">
 
         <!-- Toolbar / Header Area -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="16dp"
-            android:paddingTop="36dp"
+            android:paddingTop="8dp"
             android:paddingBottom="12dp">
 
             <!-- Back Button (Light theme circle) -->
@@ -31,14 +32,12 @@
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackgroundBorderless">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center"
-                    android:text="‹"
-                    android:textColor="@color/accent_primary"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="@color/accent_primary" />
             </FrameLayout>
 
             <!-- Screen Title (Dark Navy text) -->

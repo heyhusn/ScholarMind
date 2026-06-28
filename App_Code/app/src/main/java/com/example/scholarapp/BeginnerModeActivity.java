@@ -133,8 +133,9 @@ public class BeginnerModeActivity extends AppCompatActivity {
             chip.setText(question);
             chip.setPadding(40, 20, 40, 20);
             chip.setTextSize(14f);
-            chip.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_primary));
+            chip.setTextColor(android.graphics.Color.BLACK);
             chip.setBackground(getDrawable(R.drawable.bg_question_chip));
+
             chip.setClickable(true);
             chip.setFocusable(true);
 
@@ -180,8 +181,19 @@ public class BeginnerModeActivity extends AppCompatActivity {
                 ? FirebaseAuth.getInstance().getCurrentUser().getUid()
                 : null;
 
+        // Retrieve local sections as context for Vercel
+        String contextText = "";
+        com.example.scholarapp.models.PaperAnalysisResponse cached = com.example.scholarapp.utils.PaperLocalStore.getCachedAnalysis(this, paperId);
+        if (cached != null && cached.getSections() != null) {
+            StringBuilder sb = new StringBuilder();
+            for (com.example.scholarapp.models.PaperSection s : cached.getSections()) {
+                sb.append(s.getTitle()).append("\n").append(s.getContent()).append("\n\n");
+            }
+            contextText = sb.toString();
+        }
+
         ApiService apiService = RetrofitClient.getApiService();
-        ChatRequest request = new ChatRequest(paperId, message, userId);
+        ChatRequest request = new ChatRequest(paperId, message, userId, contextText);
         apiService.sendChatMessage("beginner", request).enqueue(new Callback<TextResponse>() {
             @Override
             public void onResponse(Call<TextResponse> call, Response<TextResponse> response) {
@@ -189,7 +201,13 @@ public class BeginnerModeActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     addBubble("assistant", response.body().getText());
                 } else {
-                    addBubble("assistant", "Sorry, I received an error from the server.");
+                    String err = "Sorry, I received an error from the server.";
+                    try {
+                        if (response.errorBody() != null) {
+                            err += "\nDetails: " + response.errorBody().string();
+                        }
+                    } catch (Exception ignored) {}
+                    addBubble("assistant", err);
                 }
                 scrollToBottom();
             }
@@ -221,7 +239,6 @@ public class BeginnerModeActivity extends AppCompatActivity {
         card.setCardElevation(4f);
         card.setCardBackgroundColor(androidx.core.content.ContextCompat.getColor(this,
                 isUser ? R.color.accent_primary : R.color.surface_card));
-
         LinearLayout.LayoutParams cardLp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -243,6 +260,7 @@ public class BeginnerModeActivity extends AppCompatActivity {
         tvTime.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_muted));
         tvTime.setPadding(isUser ? 0 : 8, 4, isUser ? 8 : 0, 0);
         tvTime.setGravity(isUser ? android.view.Gravity.END : android.view.Gravity.START);
+
 
         row.addView(card);
         row.addView(tvTime);

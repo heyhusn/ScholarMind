@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:background="@color/bg_app">
 
+    <!-- ── Header ── -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,7 +63,7 @@
             android:id="@+id/tvStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Technical"
+            android:text="🛠 Technical"
             android:textColor="@color/accent_primary_strong"
             android:textSize="13sp"
             android:textStyle="bold" />

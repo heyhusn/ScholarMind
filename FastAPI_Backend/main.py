@@ -2,10 +2,11 @@ import io
 import json
 import os
 import re
+import ssl
 import urllib.parse
 import urllib.request
 import uuid
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from fastapi import FastAPI, File, HTTPException, UploadFile, Form
 from fastapi.responses import StreamingResponse
@@ -89,6 +90,94 @@ def _slugify_section_key(title: str) -> str:
     return slug or "section"
 
 
+def _prettify_section_title(title: str) -> str:
+    title = re.sub(r"\s+", " ", (title or "").strip().strip("."))
+    title = re.sub(r"(?<=[a-z])(?=[A-Z])", " ", title)
+    title = re.sub(r"(?<=[A-Z])(?=[A-Z][a-z])", " ", title)
+    return title.strip()
+
+
+def _parse_section_heading(line: str) -> Optional[Tuple[str, str]]:
+    cleaned = re.sub(r"\s+", " ", (line or "").strip())
+    cleaned = cleaned.strip(".")
+    if not cleaned or len(cleaned) > 120:
+        return None
+
+    lowered = cleaned.lower()
+    named_sections = {
+        "abstract",
+        "references",
+        "bibliography",
+        "acknowledgments",
+        "acknowledgements",
+        "appendix",
+    }
+    if lowered in named_sections:
+        title = _prettify_section_title(cleaned)
+        return _slugify_section_key(title), title
+
+    numbered = re.match(r"^(?P<number>[1-9]\d?)\s+\.?\s*(?P<title>[A-Z][A-Za-z0-9][A-Za-z0-9\- ,:/&()]{1,90})$", cleaned)
+    if numbered:
+        title = _prettify_section_title(numbered.group("title"))
+        title_lower = title.lower()
+        if title_lower.startswith(("figure", "table", "answer", "question", "query")):
+            return None
+        return _slugify_section_key(title), f"{numbered.group('number')} {title}"
+
+    appendix = re.match(r"^(?P<label>[A-Z])\s+\.?\s*(?P<title>[A-Z][A-Za-z0-9][A-Za-z0-9\- ,:/&()]{1,90})$", cleaned)
+    if appendix:
+        title = _prettify_section_title(appendix.group("title"))
+        return _slugify_section_key(f"{appendix.group('label')} {title}"), f"{appendix.group('label')} {title}"
+
+    return None
+
+
+def extract_sections_from_text(text: str) -> List[PaperSection]:
+    """
+    Split the full extracted PDF text into dynamic top-level paper sections.
+    This keeps section coverage independent from the shorter text chunk sent to
+    the AI model for metadata and overview generation.
+    """
+    lines = text.splitlines()
+    headings = []
+    seen_keys = {}
+
+    for index, line in enumerate(lines):
+        parsed = _parse_section_heading(line)
+        if not parsed:
+            continue
+        key, title = parsed
+        duplicate_count = seen_keys.get(key, 0)
+        seen_keys[key] = duplicate_count + 1
+        if duplicate_count:
+            key = f"{key}_{duplicate_count + 1}"
+        headings.append((index, key, title))
+
+    sections = []
+    for pos, (start_index, key, title) in enumerate(headings):
+        end_index = headings[pos + 1][0] if pos + 1 < len(headings) else len(lines)
+        content_lines = []
+        for raw_line in lines[start_index + 1:end_index]:
+            cleaned = raw_line.strip()
+            if not cleaned:
+                continue
+            if re.fullmatch(r"\d{1,4}", cleaned):
+                continue
+            content_lines.append(cleaned)
+
+        content = "\n".join(content_lines).strip()
+        if content:
+            sections.append(PaperSection(key=key, title=title, content=content))
+
+    if sections:
+        return sections
+
+    full_text = text.strip()
+    if full_text:
+        return [PaperSection(key="full_text", title="Full Text", content=full_text)]
+    return []
+
+
 def _build_sections(data: dict) -> List[PaperSection]:
     sections = []
     raw_sections = data.get("sections")
@@ -154,10 +243,12 @@ def build_fallback_analysis(doc_id: str, filename: str, extracted_text: str, err
     if error_message:
         overview_body += f" Reason: {error_message[:180]}"
 
-    sections = [
-        PaperSection(key="abstract", title="Abstract", content=abstract_text or "No abstract content was extracted."),
-        PaperSection(key="results", title="Results & Excerpt", content=short_excerpt)
-    ]
+    sections = extract_sections_from_text(extracted_text)
+    if not sections:
+        sections = [
+            PaperSection(key="abstract", title="Abstract", content=abstract_text or "No abstract content was extracted."),
+            PaperSection(key="full_text", title="Full Text Excerpt", content=short_excerpt)
+        ]
 
     return PaperAnalysis(
         doc_id=doc_id,
@@ -172,7 +263,7 @@ def build_fallback_analysis(doc_id: str, filename: str, extracted_text: str, err
         ai_overview_title="Fallback analysis generated",
         ai_overview_body=overview_body,
         sections=sections,
-        abstract=abstract_text,
+        abstract=_find_section_content(sections, "abstract") or abstract_text,
         methodology=None,
         results=short_excerpt,
         conclusion=None,
@@ -214,7 +305,9 @@ async def analyze_pdf(file: UploadFile = File(...), user_id: str = Form("")):
     try:
         repaired = _repair_json(raw_json)
         data = json.loads(repaired)
-        sections = _build_sections(data)
+        ai_sections = _build_sections(data)
+        extracted_sections = extract_sections_from_text(extracted_text)
+        sections = extracted_sections or ai_sections
         analysis = PaperAnalysis(
             doc_id=doc_id,
             title=data.get("title", file.filename),
@@ -276,16 +369,43 @@ def get_firebase_project_id() -> str:
     return "scholarapp-43ed5"
 
 
+def get_firebase_api_key() -> str:
+    paths = [
+        "c:/Users/SNAKE/AndroidStudioProjects/ScholarApp/app/google-services.json",
+        "C:/Users/SNAKE/AndroidStudioProjects/ScholarApp/app/google-services.json",
+        "C:/Users/SNAKE/Desktop/mob app/scholarai/google-services.json",
+        "../google-services.json",
+        "google-services.json"
+    ]
+    for p in paths:
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    clients = data.get("client", [])
+                    if clients:
+                        api_keys = clients[0].get("api_key", [])
+                        if api_keys:
+                            key = api_keys[0].get("current_key")
+                            if key:
+                                return key
+            except Exception:
+                pass
+    return "AIzaSyCcw6_NTYWxFSJFFFMxfdDaa71uLfhzjmA"
+
+
 def get_document_context(doc_id: str, user_id: Optional[str] = None) -> str:
     if doc_id in DOCUMENTS:
         return DOCUMENTS[doc_id]
 
     if user_id:
         project_id = get_firebase_project_id()
-        url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/users/{user_id}/papers/{doc_id}"
+        api_key = get_firebase_api_key()
+        url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/users/{user_id}/papers/{doc_id}?key={api_key}"
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-            with urllib.request.urlopen(req, timeout=5) as response:
+            ssl_ctx = ssl._create_unverified_context()
+            with urllib.request.urlopen(req, timeout=5, context=ssl_ctx) as response:
                 data = json.loads(response.read().decode())
 
             fields = data.get("fields", {})
@@ -359,10 +479,12 @@ def _paper_analysis_from_firestore(doc_id: str, user_id: Optional[str]) -> Optio
         return None
 
     project_id = get_firebase_project_id()
-    url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/users/{user_id}/papers/{doc_id}"
+    api_key = get_firebase_api_key()
+    url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/users/{user_id}/papers/{doc_id}?key={api_key}"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=5) as response:
+        ssl_ctx = ssl._create_unverified_context()
+        with urllib.request.urlopen(req, timeout=5, context=ssl_ctx) as response:
             data = json.loads(response.read().decode())
 
         fields = data.get("fields", {})
@@ -420,25 +542,25 @@ def _paper_analysis_from_firestore(doc_id: str, user_id: Optional[str]) -> Optio
 
 @app.post("/api/chat/beginner", response_model=TextResponse)
 def chat_beginner(request: ChatRequest):
-    context = get_document_context(request.doc_id, request.user_id)
+    context = request.context if request.context else get_document_context(request.doc_id, request.user_id)
     return TextResponse(text=generate_chat_response(context, request.message, "beginner"))
 
 
 @app.post("/api/chat/technical", response_model=TextResponse)
 def chat_technical(request: ChatRequest):
-    context = get_document_context(request.doc_id, request.user_id)
+    context = request.context if request.context else get_document_context(request.doc_id, request.user_id)
     return TextResponse(text=generate_chat_response(context, request.message, "technical"))
 
 
 @app.post("/api/chat/freeform", response_model=TextResponse)
 def chat_freeform(request: ChatRequest):
-    context = get_document_context(request.doc_id, request.user_id)
+    context = request.context if request.context else get_document_context(request.doc_id, request.user_id)
     return TextResponse(text=generate_chat_response(context, request.message, "freeform"))
 
 
 @app.post("/api/flashcards/generate", response_model=FlashcardResponse)
 def flashcards_generate(request: DocumentRequest):
-    context = get_document_context(request.doc_id, request.user_id)
+    context = request.context if request.context else get_document_context(request.doc_id, request.user_id)
     json_response = generate_flashcards(context)
     if json_response.startswith("Error"):
         raise HTTPException(status_code=500, detail=json_response)
@@ -453,13 +575,13 @@ def flashcards_generate(request: DocumentRequest):
 
 @app.post("/api/podcast/generate", response_model=TextResponse)
 def podcast_generate(request: DocumentRequest):
-    context = get_document_context(request.doc_id, request.user_id)
+    context = request.context if request.context else get_document_context(request.doc_id, request.user_id)
     return TextResponse(text=generate_podcast_script(context))
 
 
 @app.post("/api/summary/generate", response_model=TextResponse)
 def summary_generate(request: DocumentRequest):
-    context = get_document_context(request.doc_id, request.user_id)
+    context = request.context if request.context else get_document_context(request.doc_id, request.user_id)
     return TextResponse(text=generate_summary(context))
 
 
@@ -470,7 +592,7 @@ def text_simplify(request: SimplifyRequest):
 
 @app.post("/api/quiz/generate", response_model=QuizResponse)
 def quiz_generate(request: DocumentRequest):
-    context = get_document_context(request.doc_id, request.user_id)
+    context = request.context if request.context else get_document_context(request.doc_id, request.user_id)
     json_response = generate_quiz_questions(context)
     if json_response.startswith("Error"):
         raise HTTPException(status_code=500, detail=json_response)

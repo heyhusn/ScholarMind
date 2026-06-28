@@ -14,12 +14,15 @@ class AIResponse(BaseModel):
 class DocumentRequest(BaseModel):
     doc_id: str
     user_id: Optional[str] = None
+    context: Optional[str] = None
 
 
 class ChatRequest(BaseModel):
     doc_id: str
     message: str
     user_id: Optional[str] = None
+    context: Optional[str] = None
+
 
 
 class SimplifyRequest(BaseModel):

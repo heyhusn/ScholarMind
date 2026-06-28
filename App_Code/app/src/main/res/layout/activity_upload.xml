@@ -23,13 +23,12 @@
             android:background="@drawable/splash_icon_bg"
             android:clickable="true"
             android:focusable="true">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
-                android:text="←"
-                android:textSize="16sp"
-                android:textColor="@color/text_primary"/>
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/text_primary" />
         </FrameLayout>
 
         <TextView

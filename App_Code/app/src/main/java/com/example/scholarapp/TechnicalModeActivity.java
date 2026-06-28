@@ -12,8 +12,6 @@ import androidx.cardview.widget.CardView;
 
 import com.example.scholarapp.models.PaperAnalysisResponse;
 import com.example.scholarapp.models.PaperSection;
-import com.example.scholarapp.models.SimplifyRequest;
-import com.example.scholarapp.models.TextResponse;
 import com.example.scholarapp.network.ApiService;
 import com.example.scholarapp.network.RetrofitClient;
 import com.example.scholarapp.utils.PaperLocalStore;
@@ -71,12 +69,21 @@ public class TechnicalModeActivity extends AppCompatActivity {
         if (paperAuthor != null) {
             tvPaperAuthor.setText(paperAuthor);
         }
+        tvStatus.setText("🛠 Technical");
     }
 
     private void loadTechnicalView() {
         if (paperId == null || paperId.isEmpty()) {
             tvLoading.setVisibility(View.GONE);
             Toast.makeText(this, "Missing paper ID.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Try local cache first! Very robust and fast.
+        PaperAnalysisResponse cached = PaperLocalStore.getCachedAnalysis(this, paperId);
+        if (cached != null && cached.getSections() != null && !cached.getSections().isEmpty()) {
+            tvLoading.setVisibility(View.GONE);
+            bindAnalysis(cached);
             return;
         }
 
@@ -91,17 +98,12 @@ public class TechnicalModeActivity extends AppCompatActivity {
                     String title = (String) data.get("title");
                     String author = (String) (data.get("authors") != null ? data.get("authors") : data.get("author"));
                     String year = (String) data.get("year");
-                    String size = (String) data.get("size");
-                    String category = (String) data.get("category");
 
                     if (title != null) {
                         tvPaperTitle.setText(title);
                     }
                     if (author != null && year != null) {
                         tvPaperAuthor.setText(author + " · " + year);
-                    }
-                    if (category != null && size != null) {
-                        tvStatus.setText(category + " · " + size);
                     }
                 },
                 e -> { }
@@ -129,12 +131,7 @@ public class TechnicalModeActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<PaperAnalysisResponse> call, Throwable t) {
                 tvLoading.setVisibility(View.GONE);
-                PaperAnalysisResponse cached = PaperLocalStore.getCachedAnalysis(TechnicalModeActivity.this, paperId);
-                if (cached != null) {
-                    bindAnalysis(cached);
-                } else {
-                    loadAnalysisFromFirestore();
-                }
+                loadAnalysisFromFirestore();
             }
         });
     }
@@ -150,14 +147,23 @@ public class TechnicalModeActivity extends AppCompatActivity {
                         PaperLocalStore.cacheAnalysis(TechnicalModeActivity.this, analysis);
                         bindAnalysis(analysis);
                     } else {
-                        Toast.makeText(TechnicalModeActivity.this, "Could not load paper analysis.", Toast.LENGTH_SHORT).show();
+                        showEmptyState();
                     }
                 },
                 e -> {
                     tvLoading.setVisibility(View.GONE);
-                    Toast.makeText(TechnicalModeActivity.this, "Could not load paper analysis.", Toast.LENGTH_SHORT).show();
+                    showEmptyState();
                 }
         );
+    }
+
+    private void showEmptyState() {
+        technicalSectionsContainer.removeAllViews();
+        TextView empty = new TextView(this);
+        empty.setText("No technical sections are available for this paper yet.");
+        empty.setTextSize(14f);
+        empty.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_secondary));
+        technicalSectionsContainer.addView(empty);
     }
 
     private void bindAnalysis(PaperAnalysisResponse analysis) {
@@ -189,11 +195,7 @@ public class TechnicalModeActivity extends AppCompatActivity {
         }
 
         if (technicalSectionsContainer.getChildCount() == 0) {
-            TextView empty = new TextView(this);
-            empty.setText("No technical sections are available for this paper yet.");
-            empty.setTextSize(14f);
-            empty.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_secondary));
-            technicalSectionsContainer.addView(empty);
+            showEmptyState();
         }
     }
 
@@ -238,7 +240,7 @@ public class TechnicalModeActivity extends AppCompatActivity {
 
         TextView arrow = new TextView(this);
         arrow.setText("›");
-        arrow.setTextColor(0xFF9CA3AF);
+        arrow.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_muted));
         arrow.setTextSize(18f);
         header.addView(arrow);
 
@@ -297,7 +299,7 @@ public class TechnicalModeActivity extends AppCompatActivity {
         // Original Text
         TextView tvOriginal = new TextView(this);
         tvOriginal.setText(section.getContent());
-        tvOriginal.setTextColor(0xFF333355);
+        tvOriginal.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_primary));
         tvOriginal.setTextSize(14f);
         tvOriginal.setLineSpacing(0f, 1.5f);
 
@@ -315,22 +317,22 @@ public class TechnicalModeActivity extends AppCompatActivity {
         btnFetchSimplify.setTypeface(null, android.graphics.Typeface.BOLD);
         
         android.graphics.drawable.GradientDrawable btnBg = new android.graphics.drawable.GradientDrawable();
-        btnBg.setColor(0xFFFFF7ED);
+        btnBg.setColor(androidx.core.content.ContextCompat.getColor(this, R.color.surface_elevated));
         btnBg.setCornerRadius(dp(8));
-        btnBg.setStroke(dp(1), 0xFFFFEDD5);
+        btnBg.setStroke(dp(1), androidx.core.content.ContextCompat.getColor(this, R.color.border_strong));
         btnFetchSimplify.setBackground(btnBg);
-        btnFetchSimplify.setTextColor(0xFFC2410C);
+        btnFetchSimplify.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.accent_gold));
 
         // Loading Text
         TextView tvLoadingState = new TextView(this);
         tvLoadingState.setText("✨ Processing with Scholar Mind AI...");
-        tvLoadingState.setTextColor(0xFF7C3AED);
+        tvLoadingState.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.accent_primary_strong));
         tvLoadingState.setTextSize(13f);
         tvLoadingState.setVisibility(View.GONE);
 
         // Simplified Text View
         TextView tvSimplifiedText = new TextView(this);
-        tvSimplifiedText.setTextColor(0xFF0369A1);
+        tvSimplifiedText.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_secondary));
         tvSimplifiedText.setTextSize(14f);
         tvSimplifiedText.setLineSpacing(0f, 1.5f);
         tvSimplifiedText.setVisibility(View.GONE);
@@ -345,37 +347,36 @@ public class TechnicalModeActivity extends AppCompatActivity {
 
         // Local state
         final boolean[] isSimplifiedLoaded = {false};
-        final String[] cachedSimplifiedText = {""};
 
         Runnable updateTabsUI = () -> {
             boolean isOriginalActive = tvOriginal.getVisibility() == View.VISIBLE;
             if (isOriginalActive) {
                 android.graphics.drawable.GradientDrawable activeBg = new android.graphics.drawable.GradientDrawable();
-                activeBg.setColor(0xFFEFF6FF);
+                activeBg.setColor(androidx.core.content.ContextCompat.getColor(this, R.color.surface_elevated));
                 activeBg.setCornerRadius(dp(16));
                 tabOriginal.setBackground(activeBg);
-                tabOriginal.setTextColor(0xFF1E3FE8);
+                tabOriginal.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.accent_primary_strong));
                 tabOriginal.setTypeface(null, android.graphics.Typeface.BOLD);
 
                 android.graphics.drawable.GradientDrawable inactiveBg = new android.graphics.drawable.GradientDrawable();
-                inactiveBg.setColor(0xFFF3F4F6);
+                inactiveBg.setColor(androidx.core.content.ContextCompat.getColor(this, R.color.surface_base));
                 inactiveBg.setCornerRadius(dp(16));
                 tabSimplified.setBackground(inactiveBg);
-                tabSimplified.setTextColor(0xFF4B5563);
+                tabSimplified.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_muted));
                 tabSimplified.setTypeface(null, android.graphics.Typeface.NORMAL);
             } else {
                 android.graphics.drawable.GradientDrawable inactiveBg = new android.graphics.drawable.GradientDrawable();
-                inactiveBg.setColor(0xFFF3F4F6);
+                inactiveBg.setColor(androidx.core.content.ContextCompat.getColor(this, R.color.surface_base));
                 inactiveBg.setCornerRadius(dp(16));
                 tabOriginal.setBackground(inactiveBg);
-                tabOriginal.setTextColor(0xFF4B5563);
+                tabOriginal.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.text_muted));
                 tabOriginal.setTypeface(null, android.graphics.Typeface.NORMAL);
 
                 android.graphics.drawable.GradientDrawable activeBg = new android.graphics.drawable.GradientDrawable();
-                activeBg.setColor(0xFFEFF6FF);
+                activeBg.setColor(androidx.core.content.ContextCompat.getColor(this, R.color.surface_elevated));
                 activeBg.setCornerRadius(dp(16));
                 tabSimplified.setBackground(activeBg);
-                tabSimplified.setTextColor(0xFF1E3FE8);
+                tabSimplified.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.accent_primary_strong));
                 tabSimplified.setTypeface(null, android.graphics.Typeface.BOLD);
             }
         };

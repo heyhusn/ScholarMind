@@ -100,6 +100,17 @@ def test_endpoints():
     
     refs_list = refs_data.get("references", ["Dummy Reference 1", "Dummy Reference 2"])
     
+    # Legacy .doc test
+    doc_bytes = b"This is a legacy Word document file containing text that should be extracted by the heuristic scanner. It discusses deep learning, neural networks, and reference lists."
+    print("\n--- Testing /api/references/generate (.doc support) ---")
+    response = client.post(
+        "/api/references/generate",
+        files={"file": ("test_doc.doc", doc_bytes, "application/msword")},
+        data={"style": "APA"}
+    )
+    print("Status Code:", response.status_code)
+    print("Response:", response.json())
+    
     print("\n--- Testing /api/references/export/docx ---")
     response = client.post(
         "/api/references/export/docx",

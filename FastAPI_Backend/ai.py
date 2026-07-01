@@ -11,26 +11,33 @@ DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 client = OpenAI(
     api_key=DEEPSEEK_API_KEY or "placeholder_key",
     base_url="https://api.deepseek.com",
+    timeout=20.0,
 )
 
 MODEL_NAME = "deepseek-chat"
 
 
-def _call_ai(system_prompt: str, user_prompt: str) -> str:
-    """Shared helper to call the AI model."""
+def _call_ai(system_prompt: str, user_prompt: str, timeout_seconds: float = 30.0) -> str:
+    """Shared helper to call the AI model with timeout and retry logic."""
     if not DEEPSEEK_API_KEY or DEEPSEEK_API_KEY == "your_deepseek_api_key_here":
         return "Error: DeepSeek API key is not configured in .env file."
-    try:
-        response = client.chat.completions.create(
-            model=MODEL_NAME,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        return f"Error: {e}"
+    
+    max_retries = 2
+    for attempt in range(max_retries):
+        try:
+            response = client.chat.completions.create(
+                model=MODEL_NAME,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                timeout=timeout_seconds,
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            if attempt == max_retries - 1:
+                return f"Error: AI API request failed or timed out. Details: {e}"
+            print(f"DeepSeek call failed (attempt {attempt + 1}/{max_retries}): {e}. Retrying...")
 
 
 def analyze_paper(text: str) -> str:
@@ -213,8 +220,8 @@ Rules:
 - Do not add markdown code fences like ```json.
 - Return ONLY the raw JSON array.
 """
-    truncated_text = text[:8000]
-    return _call_ai(system_prompt, f"Paper text:\n{truncated_text}")
+    truncated_text = text[:6000]
+    return _call_ai(system_prompt, f"Paper text:\n{truncated_text}", timeout_seconds=45.0)
 
 
 

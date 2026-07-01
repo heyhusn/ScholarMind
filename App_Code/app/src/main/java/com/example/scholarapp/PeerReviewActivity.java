@@ -24,6 +24,8 @@ import com.example.scholarapp.network.ApiService;
 import com.example.scholarapp.network.RetrofitClient;
 import java.io.IOException;
 import java.io.InputStream;
+import com.example.scholarapp.utils.DocumentTextExtractor;
+import org.json.JSONObject;
 import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -140,8 +142,8 @@ public class PeerReviewActivity extends AppCompatActivity {
         long size = resolveFileSize(uri);
         
         String lowerFilename = filename.toLowerCase();
-        if (!(lowerFilename.endsWith(".pdf") || lowerFilename.endsWith(".docx"))) {
-            Toast.makeText(this, "Unsupported file format. Please upload PDF or DOCX.", Toast.LENGTH_LONG).show();
+        if (!(lowerFilename.endsWith(".pdf") || lowerFilename.endsWith(".docx") || lowerFilename.endsWith(".doc"))) {
+            Toast.makeText(this, "Unsupported file format. Please upload PDF, DOCX, or DOC.", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -185,27 +187,41 @@ public class PeerReviewActivity extends AppCompatActivity {
         layoutResults.setVisibility(View.GONE);
 
         try {
-            InputStream inputStream = getContentResolver().openInputStream(selectedFileUri);
+            MultipartBody.Part body;
             
-            // Read all bytes
-            java.io.ByteArrayOutputStream byteBuffer = new java.io.ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                byteBuffer.write(buffer, 0, len);
-            }
-            byte[] fileBytes = byteBuffer.toByteArray();
-            inputStream.close();
+            // Try extracting text locally for DOCX and DOC to bypass Vercel 4.5MB payload limit
+            String localText = DocumentTextExtractor.extractText(this, selectedFileUri, selectedFilename);
+            if (localText != null && !localText.trim().isEmpty()) {
+                byte[] textBytes = localText.getBytes("UTF-8");
+                RequestBody requestFile = RequestBody.create(MediaType.parse("text/plain"), textBytes);
+                // Send it with a .txt extension so backend knows it is pre-extracted plain text
+                body = MultipartBody.Part.createFormData("file", "extracted_text.txt", requestFile);
+            } else {
+                // Fallback to sending the original file (e.g. for PDFs or if extraction fails)
+                InputStream inputStream = getContentResolver().openInputStream(selectedFileUri);
+                java.io.ByteArrayOutputStream byteBuffer = new java.io.ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = inputStream.read(buffer)) != -1) {
+                    byteBuffer.write(buffer, 0, len);
+                }
+                byte[] fileBytes = byteBuffer.toByteArray();
+                inputStream.close();
 
-            String mimeType = getContentResolver().getType(selectedFileUri);
-            if (mimeType == null) {
-                mimeType = selectedFilename.toLowerCase().endsWith(".docx") 
-                    ? "application/vnd.openxmlformats-officedocument.wordprocessingml.document" 
-                    : "application/pdf";
-            }
+                String mimeType = getContentResolver().getType(selectedFileUri);
+                if (mimeType == null) {
+                    if (selectedFilename.toLowerCase().endsWith(".docx")) {
+                        mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                    } else if (selectedFilename.toLowerCase().endsWith(".doc")) {
+                        mimeType = "application/msword";
+                    } else {
+                        mimeType = "application/pdf";
+                    }
+                }
 
-            RequestBody requestFile = RequestBody.create(MediaType.parse(mimeType), fileBytes);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("file", selectedFilename, requestFile);
+                RequestBody requestFile = RequestBody.create(MediaType.parse(mimeType), fileBytes);
+                body = MultipartBody.Part.createFormData("file", selectedFilename, requestFile);
+            }
 
             apiService.analyzePeerReview(body).enqueue(new Callback<PeerReviewResponse>() {
                 @Override
@@ -217,7 +233,22 @@ public class PeerReviewActivity extends AppCompatActivity {
                         currentResponse = response.body();
                         displayResults(currentResponse);
                     } else {
-                        Toast.makeText(PeerReviewActivity.this, "Analysis failed. Please try again.", Toast.LENGTH_SHORT).show();
+                        String errMsg = "Analysis failed. Please try again.";
+                        if (response.code() == 413) {
+                            errMsg = "File payload is too large for Vercel (limit is 4.5MB). Please upload a smaller file.";
+                        } else if (response.code() == 504) {
+                            errMsg = "Server request timed out. Please try again.";
+                        } else {
+                            try {
+                                if (response.errorBody() != null) {
+                                    JSONObject json = new JSONObject(response.errorBody().string());
+                                    errMsg = json.optString("detail", errMsg);
+                                }
+                            } catch (Exception e) {
+                                // ignore
+                            }
+                        }
+                        Toast.makeText(PeerReviewActivity.this, errMsg, Toast.LENGTH_LONG).show();
                     }
                 }
 

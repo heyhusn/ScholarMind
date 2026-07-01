@@ -45,7 +45,7 @@ from models import (
     ReferencesResponse,
     ExportReferencesRequest,
 )
-from pdf import extract_text_from_pdf, extract_text_from_docx
+from pdf import extract_text_from_pdf, extract_text_from_docx, extract_text_from_doc
 
 app = FastAPI(title="Scholar Mind Backend", description="Backend for Scholar Mind AI features")
 
@@ -83,6 +83,99 @@ def _repair_json(raw_json: str) -> str:
     # Basic unescaped control character replacement
     cleaned = re.sub(r'\t', ' ', cleaned)
     return cleaned
+
+
+def _prepare_reference_text(text: str, max_chars: int = 6000) -> str:
+    cleaned = re.sub(r"[ \t]+", " ", (text or ""))
+    cleaned = re.sub(r"\n{3,}", "\n\n", cleaned).strip()
+    if len(cleaned) <= max_chars:
+        return cleaned
+
+    reference_match = re.search(
+        r"(?im)^\s*(references|bibliography|works cited)\s*$",
+        cleaned,
+    )
+    if not reference_match:
+        return cleaned[:max_chars]
+
+    before_references = cleaned[:reference_match.start()].strip()
+    reference_section = cleaned[reference_match.start():].strip()
+    front_matter = before_references[: max_chars - 1200].strip()
+    reference_tail = reference_section[:1200].strip()
+    return f"{front_matter}\n\n{reference_tail}".strip()
+
+
+def _extract_existing_references(text: str, limit: int = 12) -> List[str]:
+    match = re.search(
+        r"(?ims)^\s*(references|bibliography|works cited)\s*$([\s\S]+)",
+        text or "",
+    )
+    if not match:
+        match = re.search(
+            r"(?is)\b(references|bibliography|works cited)\b[:\s]+(.{80,})",
+            text or "",
+        )
+    if not match:
+        return []
+
+    section_text = re.sub(
+        r"\s+(?=(?:\[\d+\]|\d{1,3}[.)]|[A-Z][A-Za-z'`-]+,\s+[A-Z]\.))",
+        "\n",
+        match.group(2),
+    )
+    lines = [
+        re.sub(r"\s+", " ", line).strip()
+        for line in section_text.splitlines()
+    ]
+    lines = [
+        line
+        for line in lines
+        if line and not re.fullmatch(r"\d{1,4}", line)
+    ]
+
+    references = []
+    current = ""
+    start_pattern = re.compile(r"^(\[\d+\]|\d{1,3}[.)]|\w[\w'`-]+,\s+)")
+
+    for line in lines:
+        if start_pattern.match(line) and current:
+            references.append(current.strip())
+            current = line
+        else:
+            current = f"{current} {line}".strip() if current else line
+
+        if len(references) >= limit:
+            break
+
+    if current and len(references) < limit:
+        references.append(current.strip())
+
+    return [ref for ref in references if len(ref) > 20][:limit]
+
+
+def _parse_references_json(raw_json: str) -> List[str]:
+    try:
+        repaired = _repair_json(raw_json)
+        data = json.loads(repaired)
+    except Exception as e:
+        print(f"Standard references parsing failed: {e}. Trying list parsing fallback.")
+        repaired = re.sub(r',\s*([\]}])', r'\1', raw_json)
+        try:
+            data = json.loads(repaired)
+        except Exception:
+            data = re.findall(r'"([^"]+)"', raw_json)
+            if not data:
+                raise e
+
+    if isinstance(data, dict) and "references" in data:
+        data = data["references"]
+    if not isinstance(data, list):
+        raise ValueError("AI response is not a JSON list of references")
+
+    references = [str(reference).strip() for reference in data if str(reference).strip()]
+    if not references:
+        raise ValueError("AI response did not include any references")
+    return references
 
 
 def _slugify_section_key(title: str) -> str:
@@ -910,12 +1003,18 @@ def get_paper_insights(request: PaperInsightsRequest):
 async def analyze_peer_review_endpoint(file: UploadFile = File(...)):
     filename = file.filename.lower()
     
-    if not (filename.endswith(".pdf") or filename.endswith(".docx")):
-        raise HTTPException(status_code=400, detail="Only PDF and DOCX files are supported.")
+    if not (filename.endswith(".pdf") or filename.endswith(".docx") or filename.endswith(".doc") or filename.endswith(".txt")):
+        raise HTTPException(status_code=400, detail="Only PDF, DOCX, DOC, and TXT files are supported.")
         
     try:
         if filename.endswith(".pdf"):
             text = await extract_text_from_pdf(file)
+        elif filename.endswith(".txt"):
+            file_bytes = await file.read()
+            text = file_bytes.decode("utf-8", errors="ignore")
+        elif filename.endswith(".doc"):
+            file_bytes = await file.read()
+            text = extract_text_from_doc(file_bytes)
         else:
             file_bytes = await file.read()
             text = extract_text_from_docx(file_bytes)
@@ -965,46 +1064,47 @@ async def analyze_peer_review_endpoint(file: UploadFile = File(...)):
 
 @app.post("/api/references/generate", response_model=ReferencesResponse)
 async def generate_references_endpoint(file: UploadFile = File(...), style: str = Form("APA")):
-    filename = file.filename.lower()
-    
-    if not (filename.endswith(".pdf") or filename.endswith(".docx")):
-        raise HTTPException(status_code=400, detail="Only PDF and DOCX files are supported.")
+    filename = (file.filename or "").lower()
+    if not (filename.endswith(".pdf") or filename.endswith(".docx") or filename.endswith(".doc") or filename.endswith(".txt")):
+        raise HTTPException(status_code=400, detail="Only PDF, DOCX, DOC, and TXT files are supported.")
         
     try:
         if filename.endswith(".pdf"):
             text = await extract_text_from_pdf(file)
+        elif filename.endswith(".txt"):
+            file_bytes = await file.read()
+            text = file_bytes.decode("utf-8", errors="ignore")
+        elif filename.endswith(".doc"):
+            file_bytes = await file.read()
+            text = extract_text_from_doc(file_bytes)
         else:
             file_bytes = await file.read()
             text = extract_text_from_docx(file_bytes)
             
         if text.startswith("Error"):
-            raise HTTPException(status_code=500, detail=text)
+            raise HTTPException(status_code=422, detail=text)
+        if len(text.strip()) < 120:
+            raise HTTPException(
+                status_code=422,
+                detail="The uploaded document does not contain enough readable text to generate references.",
+            )
             
-        raw_json = generate_paper_references(text, style)
+        prompt_text = _prepare_reference_text(text)
+        existing_references = _extract_existing_references(text)
+        raw_json = generate_paper_references(prompt_text, style)
         if raw_json.startswith("Error:"):
-            raise HTTPException(status_code=500, detail=raw_json)
+            if existing_references:
+                return ReferencesResponse(references=existing_references)
+            raise HTTPException(status_code=503, detail=raw_json)
             
         try:
-            repaired = _repair_json(raw_json)
-            data = json.loads(repaired)
-        except Exception as e:
-            print(f"Standard references parsing failed: {e}. Trying list parsing fallback.")
-            repaired = re.sub(r',\s*([\]}])', r'\1', raw_json)
-            try:
-                data = json.loads(repaired)
-            except Exception:
-                # Regex list fallback
-                data = re.findall(r'"([^"]+)"', raw_json)
-                if not data:
-                    raise e
-        
-        if not isinstance(data, list):
-            if isinstance(data, dict) and "references" in data:
-                data = data["references"]
-            else:
-                raise ValueError("AI response is not a JSON list of references")
-                
-        return ReferencesResponse(references=[str(r) for r in data])
+            return ReferencesResponse(references=_parse_references_json(raw_json))
+        except Exception:
+            if existing_references:
+                return ReferencesResponse(references=existing_references)
+            raise
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate references: {e}")
 

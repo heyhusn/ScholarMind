@@ -25,15 +25,16 @@ import androidx.cardview.widget.CardView;
 import com.example.scholarapp.models.ExportReferencesRequest;
 import com.example.scholarapp.models.ReferencesResponse;
 import com.example.scholarapp.network.ApiService;
+import com.example.scholarapp.network.ContentUriRequestBody;
 import com.example.scholarapp.network.RetrofitClient;
-import java.io.ByteArrayOutputStream;
+import com.example.scholarapp.utils.DocumentTextExtractor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -167,8 +168,8 @@ public class AddReferencesActivity extends AppCompatActivity {
         long size = resolveFileSize(uri);
         
         String lowerFilename = filename.toLowerCase();
-        if (!(lowerFilename.endsWith(".pdf") || lowerFilename.endsWith(".docx"))) {
-            Toast.makeText(this, "Unsupported file format. Please upload PDF or DOCX.", Toast.LENGTH_LONG).show();
+        if (!(lowerFilename.endsWith(".pdf") || lowerFilename.endsWith(".docx") || lowerFilename.endsWith(".doc"))) {
+            Toast.makeText(this, "Unsupported file format. Please upload PDF, DOCX, or DOC.", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -211,25 +212,31 @@ public class AddReferencesActivity extends AppCompatActivity {
         layoutResults.setVisibility(View.GONE);
 
         try {
-            InputStream inputStream = getContentResolver().openInputStream(selectedFileUri);
-            ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int len;
-            while ((len = inputStream.read(buffer)) != -1) {
-                byteBuffer.write(buffer, 0, len);
+            MultipartBody.Part filePart;
+            
+            // Try extracting text locally for DOCX and DOC to bypass Vercel 4.5MB payload limit
+            String localText = DocumentTextExtractor.extractText(this, selectedFileUri, selectedFilename);
+            if (localText != null && !localText.trim().isEmpty()) {
+                byte[] textBytes = localText.getBytes("UTF-8");
+                RequestBody requestFile = RequestBody.create(MediaType.parse("text/plain"), textBytes);
+                // Send it with a .txt extension so backend knows it is pre-extracted plain text
+                filePart = MultipartBody.Part.createFormData("file", "extracted_text.txt", requestFile);
+            } else {
+                // Fallback to sending the original file (e.g. for PDFs or if extraction fails)
+                String mimeType = getContentResolver().getType(selectedFileUri);
+                if (mimeType == null) {
+                    if (selectedFilename.toLowerCase().endsWith(".docx")) {
+                        mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                    } else if (selectedFilename.toLowerCase().endsWith(".doc")) {
+                        mimeType = "application/msword";
+                    } else {
+                        mimeType = "application/pdf";
+                    }
+                }
+                RequestBody requestFile = new ContentUriRequestBody(this, selectedFileUri, mimeType, selectedFilesize);
+                filePart = MultipartBody.Part.createFormData("file", selectedFilename, requestFile);
             }
-            byte[] fileBytes = byteBuffer.toByteArray();
-            inputStream.close();
 
-            String mimeType = getContentResolver().getType(selectedFileUri);
-            if (mimeType == null) {
-                mimeType = selectedFilename.toLowerCase().endsWith(".docx") 
-                    ? "application/vnd.openxmlformats-officedocument.wordprocessingml.document" 
-                    : "application/pdf";
-            }
-
-            RequestBody requestFile = RequestBody.create(MediaType.parse(mimeType), fileBytes);
-            MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", selectedFilename, requestFile);
             RequestBody stylePart = RequestBody.create(MediaType.parse("text/plain"), style);
 
             apiService.generateReferences(filePart, stylePart).enqueue(new Callback<ReferencesResponse>() {
@@ -243,7 +250,7 @@ public class AddReferencesActivity extends AppCompatActivity {
                         hasGeneratedReferences = true;
                         displayResults(currentReferences);
                     } else {
-                        Toast.makeText(AddReferencesActivity.this, "Failed to generate references. Please try again.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddReferencesActivity.this, extractApiError(response), Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -258,7 +265,32 @@ public class AddReferencesActivity extends AppCompatActivity {
         } catch (Exception e) {
             btnGenerate.setEnabled(true);
             layoutLoading.setVisibility(View.GONE);
-            Toast.makeText(this, "Failed to read file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to prepare file: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String extractApiError(Response<?> response) {
+        String fallback = "Failed to generate references. Please try again.";
+        if (response == null) {
+            return fallback;
+        }
+        if (response.code() == 413) {
+            return "File payload is too large for Vercel (limit is 4.5MB). Please upload a smaller file.";
+        }
+        if (response.code() == 504) {
+            return "Server request timed out. Please try again.";
+        }
+        if (response.errorBody() == null) {
+            return fallback;
+        }
+
+        try {
+            String errorJson = response.errorBody().string();
+            JSONObject json = new JSONObject(errorJson);
+            String detail = json.optString("detail", fallback);
+            return detail.isEmpty() ? fallback : detail;
+        } catch (Exception e) {
+            return fallback;
         }
     }
 
